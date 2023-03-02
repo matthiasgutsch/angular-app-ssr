@@ -1,0 +1,104 @@
+---
+# Deployment for Application.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: angular-app-ssr
+  name: angular-app-ssr
+  namespace: onlinesystem
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: angular-app-ssr
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: angular-app-ssr
+    spec:
+      containers:
+        - env:
+          image: raulrobinson/angular-app-ssr:v1
+          imagePullPolicy: Always
+          name: angular-app-ssr
+          ports:
+            - containerPort: 4000
+              name: 4000tcp01
+              protocol: TCP
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: {}
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+# Pod Application.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: angular-app-ssr
+  namespace: onlinesystem
+  labels:
+    app: angular-app-ssr
+spec:
+  containers:
+    - name: angular-app-ssr
+      image: raulrobinson/angular-app-ssr:v1
+---
+# Service for Application.
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-app-ssr-service
+  namespace: onlinesystem
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4000
+  selector:
+    app: angular-app-ssr
+---
+# Ingress for Application.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: angular-app-ssr-ingress
+  namespace: onlinesystem
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: '0'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  tls:
+    - hosts:
+        - 20.42.34.38
+      secretName: ingress-tls-csi
+  rules:
+    - http:
+        paths:
+          - path: /.*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: angular-app-ssr-service
+                port:
+                  number: 4000
+---

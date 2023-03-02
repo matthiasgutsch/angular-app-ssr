@@ -60,10 +60,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "angular-app-ssr:build:production"
+              "browserTarget": "angular-app-ssr:build:production",
+              "proxyConfig": "proxy.conf.js"
             },
             "development": {
-              "browserTarget": "angular-app-ssr:build:development"
+              "browserTarget": "angular-app-ssr:build:development",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"
@@ -117,11 +119,13 @@
           "configurations": {
             "development": {
               "browserTarget": "angular-app-ssr:build:development",
-              "serverTarget": "angular-app-ssr:server:development"
+              "serverTarget": "angular-app-ssr:server:development",
+              "proxyConfig": "proxy.conf.js"
             },
             "production": {
               "browserTarget": "angular-app-ssr:build:production",
-              "serverTarget": "angular-app-ssr:server:production"
+              "serverTarget": "angular-app-ssr:server:production",
+              "proxyConfig": "proxy.conf.js"
             }
           },
           "defaultConfiguration": "development"
