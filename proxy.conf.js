@@ -1,13 +1,13 @@
 const { env } = require('process');
 
-const target = 'https://immo.api.nexocdn.com/';
+const target = 'https://immo.api.nexocdn.com';
 
 const PROXY_CONFIG = [{
     context: [
-        ""
+        "/api/products/list_public"
     ],
     target: target,
-    secure: false,
+    secure: true,
     headers: {
         Connection: 'Keep-Alive'
     }
