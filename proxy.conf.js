@@ -1,19 +1,17 @@
 const { env } = require('process');
 
-const target = 'http://20.42.34.38';
+const target = 'https://immo.api.nexocdn.com/';
 
-const PROXY_CONFIG = [
-  {
+const PROXY_CONFIG = [{
     context: [
-      "/api/tutorials"
-   ],
+        ""
+    ],
     target: target,
     secure: false,
     headers: {
-      Connection: 'Keep-Alive'
+        Connection: 'Keep-Alive'
     }
-  }
-]
+}]
 
 console.log(PROXY_CONFIG)
 
